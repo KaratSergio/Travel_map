@@ -7,7 +7,7 @@ const isTablet = window.innerWidth <= 1024 && window.innerWidth > 748
 
 <template>
   <template v-if="isDesktop">
-    <HomepageView v-if="isDesktop" />
+    <HomepageView />
   </template>
   <template v-else-if="isTablet">
     <div>this is tablet</div>
