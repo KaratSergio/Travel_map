@@ -1,32 +1,18 @@
 <script setup>
 import IButton from '../IButton/IButton.vue'
 import FavoritePlace from '../FavoritePlace/FavoritePlace.vue'
-import { ref, reactive } from 'vue'
+import { ref } from 'vue'
 
-const counter = ref(0)
-const user = ref({
-  name: 'Tom',
-  age: 14
-})
+const buttonVariant = ref('gradient')
 
-const superUser = reactive({ name: 'Super user', age: 1000 })
-
-const increment = () => {
-  counter.value += 1
-}
-const changeUserName = () => {
-  user.value.name = 'Hurry'
-}
-const changeSuperUserName = () => {
-  superUser.name = 'Super Bob'
+const changeButtonVariant = () => {
+  buttonVariant.value = buttonVariant.value === 'gradient' ? 'outlined' : 'gradient'
 }
 </script>
 
 <template>
   <div class="px-6">
-    <div class="text-gray">User name: {{ user.name }}</div>
-    <div class="text-gray">Super user name: {{ superUser.name }}</div>
-    <div class="text-gray mb-4">Додані маркери({{ counter }})</div>
+    <div class="text-gray mb-4">Додані маркери</div>
 
     <slot name="label"></slot>
 
@@ -35,6 +21,8 @@ const changeSuperUserName = () => {
     </slot>
 
     <slot></slot>
-    <IButton class="w-full mt-10" variant="gradient" @click="increment">Додати маркер</IButton>
+    <IButton class="w-full mt-10" :variant="buttonVariant" @click="changeButtonVariant"
+      >Додати маркер</IButton
+    >
   </div>
 </template>
