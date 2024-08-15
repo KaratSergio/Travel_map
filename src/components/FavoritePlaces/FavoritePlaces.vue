@@ -35,9 +35,6 @@ const changeSuperUserName = () => {
     </slot>
 
     <slot></slot>
-
-    <IButton class="w-full" @click="changeUserName">Change name</IButton>
-    <IButton class="w-full mt-2" @click="changeSuperUserName">Change super name</IButton>
-    <IButton class="w-full mt-10" @click="increment">Додати маркер</IButton>
+    <IButton class="w-full mt-10" variant="gradient" @click="increment">Додати маркер</IButton>
   </div>
 </template>
