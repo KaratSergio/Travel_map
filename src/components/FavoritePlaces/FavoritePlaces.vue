@@ -1,11 +1,25 @@
 <script setup>
 import IButton from '../IButton/IButton.vue'
 import FavoritePlace from '../FavoritePlace/FavoritePlace.vue'
+import { ref } from 'vue'
+
+const counter = ref(0)
+const user = ref({
+  name: 'Tom',
+  age: 14
+})
+const increment = () => {
+  counter.value += 1
+}
+const changeUserName = () => {
+  user.value.name = 'Hurry'
+}
 </script>
 
 <template>
   <div class="px-6">
-    <div class="text-gray mb-4">Додані маркери</div>
+    <div class="text-gray">User name: {{ user.name }}</div>
+    <div class="text-gray mb-4">Додані маркери({{ counter }})</div>
 
     <slot name="label"></slot>
 
@@ -15,6 +29,7 @@ import FavoritePlace from '../FavoritePlace/FavoritePlace.vue'
 
     <slot></slot>
 
-    <IButton class="w-full mt-10">Додати маркер</IButton>
+    <IButton class="w-full" @click="changeUserName">Change name</IButton>
+    <IButton class="w-full mt-10" @click="increment">Додати маркер</IButton>
   </div>
 </template>
