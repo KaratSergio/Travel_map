@@ -7,6 +7,7 @@ const props = defineProps({
 })
 
 defineOptions({ inheritAttrs: false })
+
 const emit = defineEmits(['update:modalValue'])
 </script>
 
