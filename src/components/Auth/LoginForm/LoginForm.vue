@@ -12,7 +12,7 @@ const userData = reactive({
 </script>
 
 <template>
-  <FormContainer @submit.prevent="emit('submit', usserData)">
+  <FormContainer @submit.prevent="emit('submit', userData)">
     <IInput class="mb-4" placeholder="Електронна пошта" v-model="userData.email" />
     <IInput type="password" placeholder="Пароль" v-model="userData.password" />
     <IButton class="mt-10 w-full" variant="gradient" type="submit">Увійти</IButton>

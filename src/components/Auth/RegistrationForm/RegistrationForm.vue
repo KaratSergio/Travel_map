@@ -5,7 +5,7 @@ import FormContainer from '../FormContainer.vue'
 import { reactive } from 'vue'
 
 const emit = defineEmits(['submit'])
-const usserData = reactive({
+const userData = reactive({
   name: '',
   email: '',
   password: ''
@@ -14,17 +14,18 @@ const usserData = reactive({
 
 <template>
   <FormContainer
-    @submit.prevent="emit('submit', usserData)"
+    @submit.prevent="emit('submit', userData)"
     class="max-w-[500px] bg-white p-10 rounded-2xl"
   >
-    <IInput class="mb-4" label="Повне ім'я" v-modal="usserData.name" />
+    <IInput class="mb-4" label="Повне ім'я" v-model="userData.name" />
     <IInput
+      type="textarea"
       class="mb-4"
       label="Електронна пошта"
       placeholder="email@gmail.com"
-      v-modal="usserData.email"
+      v-model="userData.email"
     />
-    <IInput label="Пароль" type="password" v-modal="usserData.password" />
+    <IInput label="Пароль" type="password" v-model="userData.password" />
     <IButton class="mt-10 w-full" variant="gradient" type="submit">Створити аккаунт</IButton>
   </FormContainer>
 </template>

@@ -24,5 +24,5 @@ const openModal = () => {
   <button @click="openModal">Click me</button>
   <RegistrationForm @submit="console.log" />
   <LoginForm @submit="console.log" />
-  <IModal v-if="isOpen" @click="closeModal">Hello modal</IModal>
+  <IModal v-if="isOpen" @close="closeModal">Hello modal</IModal>
 </template>

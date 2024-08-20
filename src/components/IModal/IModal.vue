@@ -9,7 +9,7 @@ onUnmounted(() => (document.body.style.overflow = 'initial'))
 </script>
 
 <template>
-  <Teleport to="body">
+  <component :is="Teleport" to="body">
     <div
       class="flex w-full h-full fixed top-0 left-0 overflow-auto bg-[rgba(0,0,0,0.3)]"
       @click.self="emit('close')"
@@ -21,5 +21,5 @@ onUnmounted(() => (document.body.style.overflow = 'initial'))
         <slot></slot>
       </div>
     </div>
-  </Teleport>
+  </component>
 </template>
