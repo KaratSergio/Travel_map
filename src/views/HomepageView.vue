@@ -1,21 +1,38 @@
 <script setup>
-import { ref } from 'vue'
-
+import { computed, ref, onMounted } from 'vue'
 import { MapboxMap, MapboxMarker } from '@studiometa/vue-mapbox-gl'
 import 'mapbox-gl/dist/mapbox-gl.css'
 import { mapSettings } from '../map/settings'
-
 import MarkerIcon from '../components/icons/MerkerIcon.vue'
 import FavoritePlaces from '../components/FavoritePlaces/FavoritePlaces.vue'
-import { getFavoritePlaces } from '@/components/api/favorite-places'
+import { addFavoritePlace, getFavoritePlaces } from '@/components/api/favorite-places'
 import { useModal } from '@/composables/useModal'
 import CreateNewPlaceModal from '@/components/CreateNewPlaceModal/CreateNewPlaceModal.vue'
+import { useMutation } from '@/composables/useMutation'
 
-const favoritePlaces = ref([])
 const activeId = ref(null)
 const map = ref(null)
 const mapMarkerLat = ref(null)
 const { isOpen, closeModal, openModal } = useModal()
+
+const { data, mutation: getPlaces } = useMutation({
+  mutationFn: () => getFavoritePlaces()
+})
+
+const favoritePlaces = computed(() => data.value?.data ?? [])
+
+const {
+  mutation: addPlace,
+  isLoading: isAddingPlace,
+  error
+} = useMutation({
+  mutationFn: (newPlaceData) => addFavoritePlace(newPlaceData),
+  onSuccess: () => {
+    closeModal()
+    mapMarkerLat.value = null
+    getPlaces()
+  }
+})
 
 const changeActiveId = (id) => {
   activeId.value = id
@@ -31,9 +48,19 @@ const handleMapClick = ({ lngLat }) => {
   mapMarkerLat.value = [lngLat.lng, lngLat.lat]
 }
 
-onMounted(async () => {
-  const { data } = await getFavoritePlaces()
-  favoritePlaces.value = data
+const handleAddPlace = async (formData, resetForm) => {
+  const body = {
+    ...formData,
+    coordinates: mapMarkerLat.value
+  }
+
+  await addPlace(body)
+
+  resetForm()
+}
+
+onMounted(() => {
+  getPlaces()
 })
 </script>
 
@@ -46,7 +73,13 @@ onMounted(async () => {
         @place-clicked="changePlace"
         @create="openModal"
       />
-      <CreateNewPlaceModal :isOpen="isOpen" @close="closeModal" />
+      <CreateNewPlaceModal
+        :isOpen="isOpen"
+        :is-loading="isAddingPlace"
+        :has-error="error"
+        @close="closeModal"
+        @submit="handleAddPlace"
+      />
     </div>
     <div class="w-full h-full flex items-center justify-center text-6xl">
       <MapboxMap
@@ -64,7 +97,7 @@ onMounted(async () => {
         <MapboxMarker
           v-for="place in favoritePlaces"
           :key="place.id"
-          :lngLat="place.lngLat"
+          :lngLat="place.coordinates"
           anchor="bottom"
         >
           <button @click="changeActiveId(place.id)">
