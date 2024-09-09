@@ -3,6 +3,9 @@ import FavoritePlace from '../FavoritePlace/FavoritePlace.vue'
 import EditPlaceModal from '../EditPlaceModal/EditPlaceModal.vue'
 import IButton from '../IButton/IButton.vue'
 import { useModal } from '@/composables/useModal'
+import { ref, computed } from 'vue'
+import { useMutation } from '@/composables/useMutation'
+import { updateFavoritePlace } from '../api/favorite-places'
 
 const props = defineProps({
   items: {
@@ -15,9 +18,25 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(['place-clicked', 'create'])
+const emit = defineEmits(['place-clicked', 'create', 'updated'])
 
 const { isOpen: isEditModal, openModal: openEditModal, closeModal: closeEditModal } = useModal()
+const { mutation: updatePlace, isLOading } = useMutation({
+  mutationFn: (formData) => updateFavoritePlace(formData),
+  onSuccess: () => {
+    closeEditModal()
+    emit('updated')
+  }
+})
+const selectedId = ref(null)
+const selectItem = computed(() => props.items.find((place) => place.id === selectedId.value))
+
+const handleEditPlace = (id) => {
+  selectedId.value = id
+  openEditModal()
+}
+
+const handleSubmit = (formData) => updatePlace(formData)
 </script>
 
 <template>
@@ -35,13 +54,21 @@ const { isOpen: isEditModal, openModal: openEditModal, closeModal: closeEditModa
         :img="place.img"
         :is-active="place.id === props.activeId"
         @click="emit('place-clicked', place.id)"
-        @edit="openEditModal"
+        @edit="handleEditPlace(place.id)"
       />
 
-      <EditPlaceModal :is-open="isEditModal" @close="closeEditModal" />
+      <EditPlaceModal
+        :is-open="isEditModal"
+        :place="selectItem"
+        :is-loading="isLoading"
+        @close="closeEditModal"
+        @submit="handleSubmit"
+      />
     </slot>
 
     <slot></slot>
-    <IButton class="w-full mt-10" variant="gradient" @click="emit('create')">Додати маркер</IButton>
+    <IButton class="w-full mt-10" variant="gradient" @click="emit('create')">
+      Додати маркер
+    </IButton>
   </div>
 </template>
