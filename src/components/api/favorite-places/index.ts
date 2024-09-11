@@ -18,5 +18,4 @@ export const getFavoritePlace = (body: AddPoint) => clientFetch.post(BASE_PLACES
 
 export const updateFavoritePlace = (body: UpdatePoint) => clientFetch.put(BASE_PLACES_URL, body)
 
-export const deleteFavoritePlace = (body: { id: string }) =>
-  clientFetch.post(`${BASE_PLACES_URL}/delete`, body)
+export const deleteFavoritePlace = (id: string) => clientFetch.delete(`${BASE_PLACES_URL}/${id}`)
