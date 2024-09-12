@@ -10,3 +10,5 @@ export const registerUser = (body: RegisterBody) => clientFetch.post('/user/regi
 export const logout = () => clientFetch.get('/user/logout')
 
 export const refresh = () => clientFetch.post('/user/refresh')
+
+export const getUserInfo = () => clientFetch.get('user/me')
