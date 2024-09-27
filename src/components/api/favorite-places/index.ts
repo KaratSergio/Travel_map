@@ -14,6 +14,8 @@ export const getFavoritePlaces = (): Promise<UpdatePoint[]> =>
     }))
   )
 
+export const addFavoritePlace = (body: AddPoint) => clientFetch.post(BASE_PLACES_URL, body)
+
 export const getFavoritePlace = (body: AddPoint) => clientFetch.post(BASE_PLACES_URL, body)
 
 export const updateFavoritePlace = (body: UpdatePoint) => clientFetch.put(BASE_PLACES_URL, body)
